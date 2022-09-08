@@ -164,7 +164,6 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                                     <th>Tgl Barang Masuk</th>
                                     <th>Pemohon</th>
                                     <th>Supplier</th>
-                                    <th>Total Harga</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -179,7 +178,6 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                                     echo "<td>" . date('d/m/Y', strtotime($query_data["tgl_beli"])) . "</td>";
                                     echo "<td>" . $query_data["cust"] . "</td>";
                                     echo "<td>" . $query_data["supplier"] . "</td>";
-                                    echo "<td>" . number_format($query_data["totalharga"]) . "</td>";
                                     echo "<td><a class='btn btn-default btn-sm' href='".$_SERVER['PHP_SELF']."?page=view/in_detail&mode=edit&nobeli=" . md5($query_data["nobeli"])."'><i class='fa fa-fw fa-pencil color-black'></i></a>";
                                     echo "<a class='btn btn-default btn-sm' onclick=\"if(confirm('Apakah anda yakin akan menghapus data Order ?')){location.href='index2.php?page=" . $curPage . "&txtMode=Delete&nobeli=" . md5($query_data["nobeli"]) . "'}\" style='cursor:pointer;'><i class='fa fa-fw fa-trash'></i></a>";
                                     echo "</tr>";
