@@ -199,7 +199,7 @@ class c_order
 			if (!mysql_query( $q, $dbLink))
 				throw new Exception('Gagal hapus data nobeli.');
 			@mysql_query("COMMIT", $dbLink);
-			$this->strResults=$q."Sukses Hapus Data Order ";
+			$this->strResults="Sukses Hapus Data Order ";
 		}
 		catch(Exception $e) 
 		{

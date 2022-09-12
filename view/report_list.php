@@ -110,7 +110,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                 </select><br>
                 <div class="form-group">
                     <select class="form-control select2" name="txtbrg" id="txtbrg" style="width: 100%">
-                        <option value="">Semua Barang</option>;
+                        <option value="?">Semua Barang</option>;
                         <?php 
                             $q = "SELECT * FROM `aki_barang`";
                             $listbrg = mysql_query($q, $dbLink);

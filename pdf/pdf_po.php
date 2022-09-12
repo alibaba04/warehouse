@@ -37,7 +37,7 @@
     $pdf->Ln(3);
     $pdf->Cell(25,7,'Telp. ',0,0,'L',0);
     $pdf->Cell(2,5,':',0,0,'L',0);
-    $pdf->MultiCell(60,5,'62'.$hasil['nomor'],0,'J',0);
+    $pdf->MultiCell(60,5,$hasil['nomor'],0,'J',0);
     $pdf->Cell(25,7,'FOB',0,0,'L',0);
     $pdf->Cell(2,5,':',0,0,'L',0);
     $pdf->MultiCell(60,5,'-',0,'J',0);
@@ -51,7 +51,7 @@
     }else if (strlen($hasil['alamat'])<=49){
         $pdf->Ln(-39);
     }
-    $pdf->Cell(25,7,strlen($hasil['alamat']).'Alamat Tujuan',0,1,'L',0);
+    $pdf->Cell(25,7,'Alamat Tujuan',0,1,'L',0);
     $pdf->Cell(80,0.5,'',1,1,'L',0.5);
     $pdf->SetFont('Calibri', 'B', 11);
     $pdf->MultiCell(60,5,'PT Anugerah Kubah Indonesia',0,'J',0);
@@ -64,7 +64,7 @@
     $pdf->SetFont('Calibri', '', 10);
     $pdf->Cell(25,7,'Nama Pemohon',0,0,'L',0);
     $pdf->Cell(2,5,':',0,0,'L',0);
-    $pdf->MultiCell(60,5,$hasil['cust'],0,'J',0);
+    $pdf->MultiCell(60,5,'PT AKI',0,'J',0);
     $pdf->Cell(25,7,'Telp. ',0,0,'L',0);
     $pdf->Cell(2,5,':',0,0,'L',0);
     $pdf->MultiCell(60,5,$hasil['nomor'],0,'J',0);
@@ -88,7 +88,7 @@
     $jml=1;
     $total=0;
     while ($query_data = mysql_fetch_array($rs2)) {
-        $pdf->Cell(8,7,$jml,1,0,'C',0);
+        $pdf->Cell(8,7,$jml.'.',1,0,'C',0);
         if ($query_data["jbarang"] == 'penunjang') {
             $pdf->Cell(75,7, ucfirst($query_data["id_barang"]),1,0,'L',0);
         }else{
@@ -116,30 +116,35 @@
     }
     $pdf->Ln(6);
     $pdf->SetFont('Calibri', 'B', 10);
-    $pdf->Cell(150,7,'Subtotal ',0,0,'R',0);
+    $pdf->Cell(110,7,'',0,0,'R',0);
+    $pdf->Cell(40,7,'Subtotal ','B',0,'R',0);
     $pdf->SetFont('Calibri', '', 10);
-    $pdf->Cell(20,7,'Rp ',0,0,'R',0);
-    $pdf->Cell(29,7,number_format($total),0,1,'R',0);
+    $pdf->Cell(20,7,'Rp ','B',0,'R',0);
+    $pdf->Cell(29,7,number_format($total),'B',1,'R',0);
     $pdf->SetFont('Calibri', 'B', 10);
-    $pdf->Cell(150,7,'Pajak ',0,0,'R',0);
+    $pdf->Cell(110,7,'',0,0,'R',0);
+    $pdf->Cell(40,7,'Pajak ','B',0,'R',0);
     $pdf->SetFont('Calibri', '', 10);
-    $pdf->Cell(20,7,'Rp ',0,0,'R',0);
-    $pdf->Cell(29,7,number_format(0),0,1,'R',0);
+    $pdf->Cell(20,7,'Rp ','B',0,'R',0);
+    $pdf->Cell(29,7,number_format(0),'B',1,'R',0);
     $pdf->SetFont('Calibri', 'B', 10);
-    $pdf->Cell(150,7,'Diskon ',0,0,'R',0);
+    $pdf->Cell(110,7,'',0,0,'R',0);
+    $pdf->Cell(40,7,'Diskon ','B',0,'R',0);
     $pdf->SetFont('Calibri', '', 10);
-    $pdf->Cell(20,7,'Rp ',0,0,'R',0);
-    $pdf->Cell(29,7,number_format(0),0,1,'R',0);
+    $pdf->Cell(20,7,'Rp ','B',0,'R',0);
+    $pdf->Cell(29,7,number_format(0),'B',1,'R',0);
     $pdf->SetFont('Calibri', 'B', 10);
-    $pdf->Cell(150,7,'Total ',0,0,'R',0);
+    $pdf->Cell(110,7,'',0,0,'R',0);
+    $pdf->Cell(40,7,'Total ','B',0,'R',0);
     $pdf->SetFont('Calibri', '', 10);
-    $pdf->Cell(20,7,'Rp ',0,0,'R',0);
-    $pdf->Cell(29,7,number_format($total),0,1,'R',0);
+    $pdf->Cell(20,7,'Rp ','B',0,'R',0);
+    $pdf->Cell(29,7,number_format($total),'B',1,'R',0);
     $pdf->SetFont('Calibri', 'B', 14);
-    $pdf->Cell(150,7,'Jumlah Tertagih: ',0,0,'R',0);
+    $pdf->Cell(110,7,'',0,0,'R',0);
+    $pdf->Cell(40,7,'Jumlah Tertagih: ','B',0,'R',0);
     $pdf->SetFont('Calibri', '', 14);
-    $pdf->Cell(20,7,'Rp ',0,0,'R',0);
-    $pdf->Cell(29,7,number_format($total),0,1,'R',0);
+    $pdf->Cell(20,7,'Rp ','B',0,'R',0);
+    $pdf->Cell(29,7,number_format($total),'B',1,'R',0);
     //output file PDF
     $pdf->Output('po-'.$npemesanan.'.pdf', 'I'); //download file pdf
 ?>

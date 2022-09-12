@@ -73,6 +73,15 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
         $.post("function/ajax_function.php",{ fungsi: "getsatuan",kode:x },function(data)
         {
             $("#txtSatuan_"+tcounter).val(data.satuan);
+            $("#txtHarga_"+tcounter).val(data.harga);
+        },"json");
+    }
+    function selectbrg2(tcounter) {
+        var x = $("#txtkodeb_"+tcounter).val();
+        $.post("function/ajax_function.php",{ fungsi: "getsatuan2",kode:x },function(data)
+        {
+            $("#txtSatuan_"+tcounter).val(data.satuan);
+            $("#txtHarga_"+tcounter).val(data.harga);
         },"json");
     }
     function kodeb(tcounter) {
@@ -132,7 +141,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             var td = document.createElement("TD");
             td.setAttribute("align","left");
             td.style.verticalAlign = 'top';
-            td.innerHTML+='<div class="form-group"><input name="txtkodeb_'+tcounter+'" id="txtkodeb_'+tcounter+'" class="form-control" style="text-align:left" required></div>';
+            td.innerHTML+='<div class="form-group"><input name="txtkodeb_'+tcounter+'" id="txtkodeb_'+tcounter+'" class="form-control" style="text-align:left" required onfocusout="selectbrg2('+tcounter+')"></div>';
             trow.appendChild(td);
         }else{
             kodeb(tcounter);
@@ -260,7 +269,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                     </div>
                 </div>
                 <div class="form-group ">
-                    <div class="lsupp" style="padding-bottom: 10px;padding-right: 0px;padding-left: 5px;">
+                    <div class="lsupp">
                         <select class="form-control select2" name="idsupp" id="idsupp"required>
                             <?php
                             $q = 'SELECT * FROM `aki_supplier`';

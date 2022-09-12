@@ -114,7 +114,7 @@ class c_po
 			if (!$result) {
 				throw new Exception('Could not begin transaction');
 			}
-			$q3 = "UPDATE `aki_po` SET `id_supplier`='".$supp."',`totalharga`='".$totalh."',`tgl_po`='".$tgl."',`ket`='".$ket."',`acc_op`='0',`acc_fa`='0',`cust`='".$cust;
+			$q3 = "UPDATE `aki_po` SET `id_supplier`='".$supp."',`totalharga`='".$totalh."',`tgl_po`='".$tgl."',`ket`='".$ket."',`cust`='".$cust;
 			$q3.= "' WHERE nopo='".$nopo."'";
 			if (!mysql_query( $q3, $dbLink))
 				throw new Exception($q3.'Gagal Edit PO. ');
@@ -144,13 +144,13 @@ class c_po
 			$q4 = "INSERT INTO `aki_report`( `kodeUser`, `datetime`, `ket`) VALUES";
 			$q4.= "('".$pembuat."','".$tgl."','".$ket."');";
 			if (!mysql_query( $q4, $dbLink))
-				throw new Exception($q4.'Gagal Edit Project2. ');
+				throw new Exception('Gagal Edit Project2. ');
 			
 			$this->strResults="Sukses Edit";
 		}
 		catch(Exception $e) 
 		{
-			  $this->strResults="Gagal Add Project - ".$e->getMessage().'<br/>';
+			  $this->strResults="Gagal Edit Project - ".$e->getMessage().'<br/>';
 			  $result = @mysql_query('ROLLBACK', $dbLink);
 			  $result = @mysql_query('SET AUTOCOMMIT=1', $dbLink);
 			  return $this->strResults;
@@ -196,11 +196,12 @@ class c_po
 		return $this->strResults;
 		
 	}
-	function accop($nopo)
+	function accop($nopo,$kode)
 	{
 		global $dbLink;
 
 		$nopo  = secureParam($nopo,$dbLink);
+		$kode  = secureParam($kode,$dbLink);
         $pembatal = $_SESSION["my"]->id;
 
 		try
@@ -219,7 +220,7 @@ class c_po
 			if (!mysql_query( $q4, $dbLink))
 						throw new Exception($q4.'Gagal Acc data nopo. ');
 
-			$q = "UPDATE `aki_po` SET `acc_op`='1' WHERE md5(nopo)='".$nopo."'";
+			$q = "UPDATE `aki_dpo` SET `acc_op`='1' WHERE md5(nopo)='".$nopo."' and md5(kode_barang)='".$kode."'";
 			if (!mysql_query( $q, $dbLink))
 				throw new Exception('Gagal Acc data nopo.');
 			@mysql_query("COMMIT", $dbLink);
@@ -235,11 +236,12 @@ class c_po
 		return $this->strResults;
 		
 	}
-	function cancelop($nopo)
+	function cancelop($nopo,$kode)
 	{
 		global $dbLink;
 
 		$nopo  = secureParam($nopo,$dbLink);
+		$kode  = secureParam($kode,$dbLink);
         $pembatal = $_SESSION["my"]->id;
 
 		try
@@ -258,7 +260,7 @@ class c_po
 			if (!mysql_query( $q4, $dbLink))
 						throw new Exception($q4.'Gagal Acc data nopo. ');
 
-			$q = "UPDATE `aki_po` SET `acc_op`='0' WHERE md5(nopo)='".$nopo."'";
+			$q = "UPDATE `aki_dpo` SET `acc_op`='0' WHERE md5(nopo)='".$nopo."' and md5(kode_barang)='".$kode."'";
 			if (!mysql_query( $q, $dbLink))
 				throw new Exception('Gagal Acc data nopo.');
 			@mysql_query("COMMIT", $dbLink);
@@ -274,11 +276,12 @@ class c_po
 		return $this->strResults;
 		
 	}
-	function accfa($nopo)
+	function accfa($nopo,$kode)
 	{
 		global $dbLink;
 
 		$nopo  = secureParam($nopo,$dbLink);
+		$kode  = secureParam($kode,$dbLink);
         $pembatal = $_SESSION["my"]->id;
 
 		try
@@ -297,7 +300,7 @@ class c_po
 			if (!mysql_query( $q4, $dbLink))
 						throw new Exception($q4.'Gagal Acc data nopo. ');
 
-			$q = "UPDATE `aki_po` SET `acc_fa`='1' WHERE md5(nopo)='".$nopo."'";
+			$q = "UPDATE `aki_dpo` SET `acc_fa`='1' WHERE md5(nopo)='".$nopo."' and md5(kode_barang)='".$kode."'";
 			if (!mysql_query( $q, $dbLink))
 				throw new Exception('Gagal Acc data nopo.');
 			@mysql_query("COMMIT", $dbLink);
@@ -313,11 +316,12 @@ class c_po
 		return $this->strResults;
 		
 	}
-	function cancelfa($nopo)
+	function cancelfa($nopo,$kode)
 	{
 		global $dbLink;
 
 		$nopo  = secureParam($nopo,$dbLink);
+		$kode  = secureParam($kode,$dbLink);
         $pembatal = $_SESSION["my"]->id;
 
 		try
@@ -336,7 +340,7 @@ class c_po
 			if (!mysql_query( $q4, $dbLink))
 						throw new Exception($q4.'Gagal Acc data nopo. ');
 
-			$q = "UPDATE `aki_po` SET `acc_fa`='0' WHERE md5(nopo)='".$nopo."'";
+			$q = "UPDATE `aki_dpo` SET `acc_fa`='0' WHERE md5(nopo)='".$nopo."' and md5(kode_barang)='".$kode."'";
 			if (!mysql_query( $q, $dbLink))
 				throw new Exception('Gagal Acc data nopo.');
 			@mysql_query("COMMIT", $dbLink);

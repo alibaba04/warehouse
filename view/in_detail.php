@@ -386,7 +386,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                     <tbody id="kendali">
                         <?php
                         if ($_GET['mode']=='edit'){
-                            $q = "SELECT db.*,ba.kode,ba.nama ,dp.qty as qtypo,(SELECT qty FROM aki_dbeli db left join aki_beli b on b.nobeli=db.nobeli WHERE md5(b.nobeli)!='".$nobeli."' and b.nopo='".$nomerpo."' ) as qtypakai FROM aki_dbeli db left join aki_barang ba on db.kode_barang=ba.kode left join aki_beli b on b.nobeli=db.nobeli left join aki_dpo dp on b.nopo=dp.nopo WHERE md5(db.nobeli)='".$nobeli."'";
+                            $q = "SELECT db.*,ba.kode,ba.nama ,dp.qty as qtypo,(SELECT qty FROM aki_dbeli db left join aki_beli b on b.nobeli=db.nobeli WHERE md5(b.nobeli)!='".$nobeli."' and b.nopo='".$nomerpo."' ) as qtypakai FROM aki_dbeli db left join aki_barang ba on db.kode_barang=ba.kode left join aki_beli b on b.nobeli=db.nobeli left join aki_dpo dp on b.nopo=dp.nopo WHERE md5(db.nobeli)='".$nobeli."' and acc_op='1' and acc_fa='1'";
                             $rsdpolist = mysql_query($q, $dbLink);
                             $iPO = 0;
                             while ($dpolist = mysql_fetch_array($rsdpolist)) {
@@ -414,7 +414,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                             }
                         }else{
                             if (isset($_GET["nopo"])){
-                                $q = "SELECT dpo.*,b.kode,b.nama FROM `aki_dpo` dpo left join aki_barang b on dpo.kode_barang=b.kode WHERE md5(dpo.nopo)='".$nopo."' order by id asc";
+                                $q = "SELECT dpo.*,b.kode,b.nama FROM `aki_dpo` dpo left join aki_barang b on dpo.kode_barang=b.kode WHERE md5(dpo.nopo)='".$nopo."' and acc_op='1' and acc_fa='1' order by id asc";
                                 $rsdpolist = mysql_query($q, $dbLink);
                                 $iPO = 0;
                                 while ($dpolist = mysql_fetch_array($rsdpolist)) {
@@ -469,7 +469,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                 <div class="modal-body">
                     <div class="form-group">
                         <?php  
-                        $q = 'SELECT * FROM `aki_po` WHERE aktif=0 and acc_op="1" and acc_fa="1" ORDER BY id desc';
+                        $q = 'SELECT dpo.* FROM `aki_dpo` dpo left join aki_po po on dpo.nopo=po.nopo WHERE aktif=0 and acc_op="1" and acc_fa="1" ORDER BY dpo.id desc';
                         $sql_po = mysql_query($q,$dbLink);
                         ?>
                         <select class="form-control select2" name="snopo" id="snopo" style="width: 100%">

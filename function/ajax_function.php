@@ -89,12 +89,25 @@ case "ambilkodeb":
 break;
 case "getsatuan":
     $kode = $_POST['kode'];
-    $result = mysql_query("SELECT b.*,masuk,keluar,retur,so FROM `aki_barang` b left join (SELECT kode_barang,sum(db.qty) as masuk FROM aki_dbeli as db group by db.kode_barang) as db on b.kode=db.kode_barang left join (SELECT kode_barang,sum(dk.qty) as keluar FROM aki_dbkeluar as dk group by dk.kode_barang) as dk on b.kode=dk.kode_barang left join (SELECT kode_barang,sum(dr.qty) as retur FROM aki_dbretur as dr group by dr.kode_barang) as dr on b.kode=dr.kode_barang left join (SELECT kode_barang,sum(dso.qty) as so FROM aki_dbso as dso group by dso.kode_barang) as dso on b.kode=dso.kode_barang WHERE kode='".$kode."' group by b.kode ORDER BY `dk`.`keluar` DESC", $dbLink);
+    $result = mysql_query("SELECT b.*,masuk,keluar,retur,so,harga FROM `aki_barang` b left join (SELECT kode_barang,sum(db.qty) as masuk FROM aki_dbeli as db group by db.kode_barang) as db on b.kode=db.kode_barang left join (SELECT kode_barang,sum(dk.qty) as keluar FROM aki_dbkeluar as dk group by dk.kode_barang) as dk on b.kode=dk.kode_barang left join (SELECT kode_barang,sum(dr.qty) as retur FROM aki_dbretur as dr group by dr.kode_barang) as dr on b.kode=dr.kode_barang left join (SELECT kode_barang,sum(dso.qty) as so FROM aki_dbso as dso group by dso.kode_barang) as dso on b.kode=dso.kode_barang left join (SELECT a1.* FROM (SELECT dpo.*,tgl_po,RANK() OVER (PARTITION BY dpo.kode_barang ORDER BY tgl_po DESC) rank FROM `aki_dpo` dpo left join aki_po po on dpo.nopo=po.nopo) as a1 where a1.rank=1 group by a1.kode_barang) as a2 on b.kode=a2.kode_barang WHERE kode='".$kode."' group by b.kode ORDER BY `dk`.`keluar` DESC", $dbLink);
     if (mysql_num_rows($result)>0) {
         $idx = 0;
         while ( $data = mysql_fetch_assoc($result)) {
             $stok = $data['astok']+$data['masuk']-$data['keluar']+$data['retur']+($data['so']);
-            echo json_encode(array("satuan"=>$data['satuan'],"stok"=>$stok));
+            $harga = number_format($data['harga']);
+            echo json_encode(array("satuan"=>$data['satuan'],"stok"=>$stok,"harga"=>$harga));
+        } 
+        break;
+    }
+break;
+case "getsatuan2":
+    $kode = $_POST['kode'];
+    $result = mysql_query("SELECT a1.* FROM (SELECT dpo.*,tgl_po,RANK() OVER (PARTITION BY dpo.kode_barang ORDER BY tgl_po DESC) rank FROM `aki_dpo` dpo left join aki_po po on dpo.nopo=po.nopo) as a1 where kode_barang like '".$kode."' and a1.rank=1 group by a1.kode_barang", $dbLink);
+    if (mysql_num_rows($result)>0) {
+        $idx = 0;
+        while ( $data = mysql_fetch_assoc($result)) {
+            $harga = number_format($data['harga']);
+            echo json_encode(array("satuan"=>$data['satuan'],"harga"=>$harga));
         } 
         break;
     }
