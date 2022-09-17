@@ -29,7 +29,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
 
 //Jika Mode Hapus/Delete
     if ($_GET["txtMode"] == "Delete") {
-        $pesan = $tmporder->delete($_GET["nobeli"]);
+        $pesan = $tmporder->delete($_GET["nobeli"],$_GET["nopo"],$_GET["qty"],$_GET["kode"]);
     }
 
 //Seharusnya semua transaksi Add dan Edit Sukses karena data sudah tervalidasi dengan javascript di form detail.
@@ -135,7 +135,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             <div class="box box-primary">
                 <?php
             //database
-                 $q = "SELECT b.*,db.qty,db.satuan,brg.nama,supp.* FROM `aki_beli` b left join aki_dbeli db on b.nobeli=db.nobeli left join aki_supplier supp on b.id_supplier=supp.kodesupp left join aki_po po on b.nopo=po.nopo left join aki_barang brg on db.kode_barang=brg.kode WHERE b.aktif=0 order by b.id desc";
+                 $q = "SELECT b.*,db.qty,db.satuan,brg.kode,brg.nama,supp.* FROM `aki_beli` b left join aki_dbeli db on b.nobeli=db.nobeli left join aki_supplier supp on b.id_supplier=supp.kodesupp left join aki_po po on b.nopo=po.nopo left join aki_barang brg on db.kode_barang=brg.kode WHERE b.aktif=0 order by b.id desc";
             //Paging
                 $rs = new MySQLPagedResultSet($q, 50, $dbLink);
                 ?>
@@ -183,7 +183,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                                     echo "<td>" . $query_data["satuan"] . "</td>";
                                     echo "<td>" . date('d/m/Y', strtotime($query_data["tgl_beli"])) . "</td>";
                                     echo "<td><a class='btn btn-default btn-sm' href='".$_SERVER['PHP_SELF']."?page=view/in_detail&mode=edit&nobeli=" . md5($query_data["nobeli"])."'><i class='fa fa-fw fa-pencil color-black'></i></a>";
-                                    echo "<a class='btn btn-default btn-sm' onclick=\"if(confirm('Apakah anda yakin akan menghapus data Order ?')){location.href='index2.php?page=" . $curPage . "&txtMode=Delete&nobeli=" . md5($query_data["nobeli"]) . "'}\" style='cursor:pointer;'><i class='fa fa-fw fa-trash'></i></a>";
+                                    echo "<a class='btn btn-default btn-sm' onclick=\"if(confirm('Apakah anda yakin akan menghapus data Order ?')){location.href='index2.php?page=" . $curPage . "&txtMode=Delete&nobeli=" . md5($query_data["nobeli"]) . "&nopo=" . ($query_data["nopo"])."&qty=" . ($query_data["qty"])."&kode=" . ($query_data["kode"])."'}\" style='cursor:pointer;'><i class='fa fa-fw fa-trash'></i></a>";
                                     echo "</tr>";
                                     $rowCounter++;
                                 }

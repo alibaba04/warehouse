@@ -391,10 +391,10 @@ function Header()
 
 function Footer()
 {
-	$this->SetMargins(75, 10, 15, true);
-	$this->SetY(5);
+	//$this->SetMargins(75, 10, 15, true);
+	//$this->SetY(5);
     // Arial italic 8
-        //$this->Cell(120,5,'Halaman '.$this->PageNo(),0,0,'R');
+        //$this->Cell(200,-580,'Halaman '.$this->PageNo(),0,0,'R');
 }
 
 function PageNo()

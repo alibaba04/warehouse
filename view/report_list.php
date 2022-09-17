@@ -43,9 +43,12 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
         }
         if ($("#txtJenis").val() != 1) {
             $(".btnexcel").prop('disabled', true);
+            $('#tgl').daterangepicker({ 
+            locale: { format: 'DD-MM-YYYY' } });
         }
         if ($("#txtJenis").val() == 1) {
             $(".btnexcel").prop('disabled', false);
+            
         }
     }
 
@@ -78,8 +81,12 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
         }
     }
     function topdf() {
+        var chk = 0;
+        if ($('#customCheckbox1').is(':checked')) {
+            chk = 1;
+        }
         if ($("#txtJenis").val() == 1) {
-            location.href='pdf/pdf_lapwh.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val();
+            location.href='pdf/pdf_brg.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val()+'&chk='+chk;
         }else if($("#txtJenis").val() == 2){
             location.href='pdf/pdf_lapin.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val();
         }else if($("#txtJenis").val() == 3){
@@ -88,6 +95,8 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             location.href='pdf/pdf_lapretur.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val();
         }else if($("#txtJenis").val() == 5){
             location.href='pdf/pdf_lapso.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val();
+        }else if($("#txtJenis").val() == 6){
+            location.href='pdf/pdf_lapwh.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val();
         }   
     }
 </script>
@@ -102,12 +111,14 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             </div>
             <div class="modal-body">
                 <select class="form-control" name="txtJenis" id="txtJenis" onchange="myFchange()">
-                    <option value="1">Laporan Gudang</option>
+                    <option value="1">Laporan Barang</option>
                     <option value="2">Laporan Barang Masuk</option>
                     <option value="3">Laporan Barang Keluar</option>
                     <option value="4">Laporan Barang Retur</option>
                     <option value="5">Laporan Stok Opname</option>
+                    <option value="6">Laporan Gudang</option>
                 </select><br>
+
                 <div class="form-group">
                     <select class="form-control select2" name="txtbrg" id="txtbrg" style="width: 100%">
                         <option value="?">Semua Barang</option>;
@@ -119,6 +130,10 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                             }
                         ?>
                     </select>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
+                    <label for="customCheckbox1" class="custom-control-label">Stok Habis</label>
                 </div>
                 <input type="text" class="form-control" name="tgl" id="tgl" 
                 <?php

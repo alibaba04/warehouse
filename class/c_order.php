@@ -75,7 +75,7 @@ class c_order
 					if (!mysql_query( $q2, $dbLink))
 						throw new Exception('dbeli.'.mysql_error());
 
-					$q3 = "UPDATE `aki_dpo` SET `qtymasuk`=`qtymasuk`+".$qtym." WHERE nopo='".$nopo."'";
+					$q3 = "UPDATE `aki_dpo` SET `qtymasuk`=`qtymasuk`+".$qtym." WHERE nopo='".$nopo."' and kode_barang='".$idb."'";
 					if (!mysql_query( $q3, $dbLink))
 						throw new Exception('dpo.'.mysql_error());
 					@mysql_query("COMMIT", $dbLink);
@@ -153,7 +153,7 @@ class c_order
 					$q2.= "VALUES ('".$nobeli."','".$jbarang."','".$idb."','".$qtym."', '".$satuan."', '".$h."', '".$t."');";
 					if (!mysql_query( $q2, $dbLink))
 						throw new Exception('dbeli.'.mysql_error());
-					$q3 = "UPDATE `aki_dpo` SET `qtymasuk`=".($qtypakai+$qtym)." WHERE nopo='".$nopo."'";
+					$q3 = "UPDATE `aki_dpo` SET `qtymasuk`=".($qtypakai+$qtym)." WHERE nopo='".$nopo."' and kode_barang='".$kode."'";
 					if (!mysql_query( $q3, $dbLink))
 						throw new Exception('dpo.'.mysql_error());
 					@mysql_query("COMMIT", $dbLink);
@@ -172,11 +172,14 @@ class c_order
 		return $this->strResults;
 	}
 
-	function delete($nobeli)
+	function delete($nobeli,$nopo,$qty,$kode)
 	{
 		global $dbLink;
 
 		$nobeli  = secureParam($nobeli,$dbLink);
+		$nopo  = secureParam($nopo,$dbLink);
+		$kode  = secureParam($kode,$dbLink);
+		$qty  = secureParam($qty,$dbLink);
         $pembatal = $_SESSION["my"]->id;
 
 		try
@@ -194,6 +197,10 @@ class c_order
 			$q4.= "('".$pembatal."','".$tgl."','".$ket."');";
 			if (!mysql_query( $q4, $dbLink))
 						throw new Exception($q4.'Gagal ubah data KK. ');
+
+			$q3 = "UPDATE `aki_dpo` SET `qtymasuk`=`qtymasuk`-".$qty." WHERE nopo='".$nopo."' and kode_barang='".$kode."'";
+			if (!mysql_query( $q3, $dbLink))
+				throw new Exception('dpo.'.mysql_error());
 
 			$q = "UPDATE `aki_beli` SET `aktif`='1' WHERE md5(nobeli)='".$nobeli."'";
 			if (!mysql_query( $q, $dbLink))

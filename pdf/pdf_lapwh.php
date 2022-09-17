@@ -28,7 +28,7 @@
     $pdf->Cell(70,6,'Barang',1,0,'C',0);
     $pdf->Cell(20,6,'Qty',1,1,'C',0);
     $filter = '';
-    if ($brg == '?') {
+    if ($brg != '?') {
         $filter = "BETWEEN '".$tgl1."' and '".$tgl2."' and kode='".$brg."'";
     }else{
         $filter = "BETWEEN '".$tgl1."' and '".$tgl2."'";
