@@ -43,18 +43,25 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
         }
         if ($("#txtJenis").val() != 1) {
             $(".btnexcel").prop('disabled', true);
-            $('#tgl').daterangepicker({ 
-            locale: { format: 'DD-MM-YYYY' } });
+            document.getElementById('tgl2').style.display = 'none';
+            document.getElementById('tgl').style.display = 'block';
         }
         if ($("#txtJenis").val() == 1) {
+            document.getElementById('tgl2').style.display = 'block';
+            document.getElementById('tgl').style.display = 'none';
             $(".btnexcel").prop('disabled', false);
             
         }
     }
 
     $(document).ready(function () {
+        document.getElementById('tgl').style.display = 'none';
         $('#tgl').daterangepicker({ 
             locale: { format: 'DD-MM-YYYY' } });
+        $('#tgl2').datepicker({ 
+           format: 'dd-mm-yyyy',
+           "autoclose": true
+        }).datepicker("setDate",'now');
         if ($("#txtJenis").val() != 1) {
             $(".btnexcel").prop('disabled', true);
         }
@@ -82,11 +89,15 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
     }
     function topdf() {
         var chk = 0;
-        if ($('#customCheckbox1').is(':checked')) {
+        if ($('#rdo1').is(':checked')) {
+            chk = 0;
+        }else if($('#rdo2').is(':checked')){
             chk = 1;
+        }else{
+            chk = 2;
         }
         if ($("#txtJenis").val() == 1) {
-            location.href='pdf/pdf_brg.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val()+'&chk='+chk;
+            location.href='pdf/pdf_brg.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl2").val()+'&chk='+chk;
         }else if($("#txtJenis").val() == 2){
             location.href='pdf/pdf_lapin.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl").val();
         }else if($("#txtJenis").val() == 3){
@@ -132,16 +143,30 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                     </select>
                 </div>
                 <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
-                    <label for="customCheckbox1" class="custom-control-label">Stok Habis</label>
+                    <section class="col-lg-4">
+                        <label>
+                            <input type="radio" name="r1" class="minimal" id="rdo1" checked="">
+                        Stok > minStok
+                        </label>
+                    </section>
+                    <section class="col-lg-4">
+                        <label>
+                            <input type="radio" name="r1" class="minimal" id="rdo2">
+                        Stok Habis
+                        </label>
+                    </section>
+                    <section class="col-lg-4">
+                        <label>
+                            <input type="radio" name="r1" class="minimal" id="rdo3">
+                        Stok < minStok
+                        </label>
+                    </section>
+                    
                 </div>
                 <input type="text" class="form-control" name="tgl" id="tgl" 
-                <?php
-                if (isset($_GET["tanggal"])) {
-                    echo("value='" . $_GET["tgl"] . "'");
-                }
-                ?>
-                onKeyPress="return handleEnter(this, event)" placeholder="Range Date">
+                onKeyPress="return handleEnter(this, event)" placeholder="Range Date" required="">
+                <input type="text" class="form-control" name="tgl2" id="tgl2" 
+                onKeyPress="return handleEnter(this, event)" placeholder="Date" required="">
             </div>
             <div class="modal-footer">
             <?php
