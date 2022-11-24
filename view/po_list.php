@@ -73,7 +73,7 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             alert('data');
         },"json");
     }
-    $(function () {
+    $(document).ready(function () {
         $(".select2").select2();
         $("#example1").DataTable({
             responsive: true,
@@ -212,10 +212,10 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                                     echo "<td>" . $query_data["cust"] . "</td>";
                                     echo "<td>" . $query_data["supplier"] . "</td>";
                                     echo "<td>" . $query_data["jbarang"] . "</td>";
-                                    if ($query_data["jbarang"] == 'penunjang') {
-                                        echo "<td>" . $query_data["kode_barang"] . "</td>";
-                                    }else{
+                                    if ($query_data["jbarang"] == 'persediaan') {
                                         echo "<td>" . $query_data["nama"] . "</td>";
+                                    }else{
+                                        echo "<td>" . $query_data["kode_barang"] . "</td>";
                                     }
                                     echo "<td class='psymbol'>" . $query_data["qty"] . "</td>";
                                     echo "<td class='psymbol'>" . $query_data["satuan"] . "</td>";
@@ -257,9 +257,11 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                                         echo "</center></td>";
                                     }
                                     echo "<td>";
-                                    if ($hakUser == 90 && $query_data["acc_fa"]!=1 or $query_data["acc_op"]!=1) {
-                                        echo "<a class='btn btn-default btn-sm' href='".$_SERVER['PHP_SELF']."?page=view/po_detail&mode=edit&nopo=" . md5($query_data["nopo"])."'><i class='fa fa-fw fa-pencil color-black'></i></a>";
-                                        echo "<a class='btn btn-default btn-sm' onclick=\"if(confirm('Apakah anda yakin akan menghapus data PO ?')){location.href='index2.php?page=" . $curPage . "&txtMode=Delete&nopo=" . md5($query_data["nopo"]) . "'}\" style='cursor:pointer;'><i class='fa fa-fw fa-trash'></i></a>";
+                                    if ($query_data["acc_fa"]!=1 or $query_data["acc_op"]!=1) {
+                                        if ($hakUser == 90) {
+                                            echo "<a class='btn btn-default btn-sm' href='".$_SERVER['PHP_SELF']."?page=view/po_detail&mode=edit&nopo=" . md5($query_data["nopo"])."'><i class='fa fa-fw fa-pencil color-black'></i></a>";
+                                            echo "<a class='btn btn-default btn-sm' onclick=\"if(confirm('Apakah anda yakin akan menghapus data PO ?')){location.href='index2.php?page=" . $curPage . "&txtMode=Delete&nopo=" . md5($query_data["nopo"]) . "'}\" style='cursor:pointer;'><i class='fa fa-fw fa-trash'></i></a>";
+                                        }
                                     }
                                     echo "</td></tr>";
                                     $rowCounter++;

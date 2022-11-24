@@ -21,12 +21,13 @@
     $pdf->SetFont('Calibri', '', 12);
     $totDebet = $totKredit = 0; $selisih = 0;
     $pdf->Ln(5);
-    $pdf->Cell(40,6,'No Transaksi',1,0,'C',0);
-    $pdf->Cell(25,6,'Tanggal',1,0,'C',0);
-    $pdf->Cell(25,6,'User',1,0,'C',0);
-    $pdf->Cell(25,6,'Proyek',1,0,'C',0);
-    $pdf->Cell(70,6,'Barang',1,0,'C',0);
-    $pdf->Cell(20,6,'Qty',1,1,'C',0);
+    $pdf->Cell(10,7,'No',1,0,'C',0);
+    $pdf->Cell(75,7,'Nama Barang',1,0,'C',0);
+    $pdf->Cell(22,7,'in',1,0,'C',0);
+    $pdf->Cell(22,7,'out',1,0,'C',0);
+    $pdf->Cell(22,7,'retur',1,0,'C',0);
+    $pdf->Cell(22,7,'so',1,0,'C',0);
+    $pdf->Cell(22,7,'Stok',1,1,'C',0);
     $filter = '';
     if ($brg != '?') {
         $filter = "BETWEEN '".$tgl1."' and '".$tgl2."' and kode='".$brg."'";
@@ -34,29 +35,23 @@
         $filter = "BETWEEN '".$tgl1."' and '".$tgl2."'";
     }
     //database
-    $q2 = "SELECT b.kode,b.nama,cust,'-' as kodeproyek,bb.nobeli as no,qty,tgl_beli as tgl,'in' as ket FROM `aki_barang` b RIGHT join aki_dbeli db on b.kode=db.kode_barang RIGHT join aki_beli bb on bb.nobeli=db.nobeli where tgl_beli ".$filter." UNION ALL SELECT b.kode,b.nama,cust,kodeproyek,bk.nobkeluar as no,qty,tgl_bkeluar as tgl,'out' as ket FROM `aki_barang` b RIGHT join aki_dbkeluar dbk on b.kode=dbk.kode_barang RIGHT join aki_bkeluar bk on bk.nobkeluar=dbk.nobkeluar where tgl_bkeluar ".$filter." UNION ALL SELECT b.kode,b.nama,'-' as cust,'-' as kodeproyek,bs.nobso as no,qty,tgl_bso as tgl,'so' as ket FROM `aki_barang` b RIGHT join aki_dbso dbs on b.kode=dbs.kode_barang RIGHT join aki_bso bs on bs.nobso=dbs.nobso where tgl_bso ".$filter." UNION ALL SELECT b.kode,b.nama,'-' as cust,'-' as kodeproyek,br.nobretur as no,qty,tgl_bretur as tgl,'re' as ket FROM `aki_barang` b RIGHT join aki_dbretur dbr on b.kode=dbr.kode_barang RIGHT join aki_bretur br on br.nobretur=dbr.nobretur where tgl_bretur ".$filter;
+    $q2 = "SELECT b.*,IFNULL(masuk, 0) as masuk, IFNULL(retur, 0) as retur, IFNULL(keluar, 0) as keluar, IFNULL(so, 0) as so,harga,tgl_po FROM `aki_barang` b left join (SELECT kode_barang,sum(db.qty) as masuk,db.nobeli FROM aki_dbeli db left join aki_beli b on db.nobeli=b.nobeli where aktif=0 and tgl_beli ".$filter." group by db.kode_barang) as db on b.kode=db.kode_barang left join (SELECT kode_barang,sum(dk.qty) as keluar FROM aki_dbkeluar dk left join aki_bkeluar bk on dk.nobkeluar=bk.nobkeluar where aktif=0 and tgl_bkeluar ".$filter." group by dk.kode_barang) as dk on b.kode=dk.kode_barang left join (SELECT kode_barang,sum(dr.qty) as retur FROM aki_dbretur dr left join aki_bretur br on dr.nobretur=br.nobretur where aktif=0 and tgl_bretur ".$filter." group by dr.kode_barang) as dr on b.kode=dr.kode_barang left join (SELECT kode_barang,sum(dso.qty) as so FROM aki_dbso dso left join aki_bso so on dso.nobso=so.nobso where aktif=0 and tgl_bso ".$filter." group by dso.kode_barang ) as dso on b.kode=dso.kode_barang left join (SELECT a1.* FROM (SELECT dpo.*,tgl_po,RANK() OVER (PARTITION BY dpo.kode_barang ORDER BY tgl_po DESC) rank FROM `aki_dpo` dpo left join aki_po po on dpo.nopo=po.nopo) as a1 where a1.rank=1 and tgl_po ".$filter." group by a1.kode_barang) as a2 on b.kode=a2.kode_barang group by b.kode ORDER BY `kode` ASC";
     $rs2 = mysql_query($q2, $dbLink);
-    $total=0;
+    $total=1;
     while ($query_data = mysql_fetch_array($rs2)) {
-        if ($query_data["ket"] == 'in') {
+        if ($total % 2 == 0) {
             $pdf->SetFillColor(172, 203, 252);
-        }elseif($query_data["ket"] == 'out'){
-            $pdf->SetFillColor(230, 147, 153);
-        }elseif($query_data["ket"] == 're'){
-            $pdf->SetFillColor(234, 247, 193);
         }else{
             $pdf->SetFillColor(252, 252, 250);
         }
-        $pdf->Cell(40,6,$query_data["no"],1,0,'L',1);
-        $pdf->Cell(25,6,$query_data["tgl"],1,0,'C',1);
-        $pdf->Cell(25,6,$query_data["cust"],1,0,'C',1);
-        $pdf->Cell(25,6,$query_data["kodeproyek"],1,0,'C',1);
-        $pdf->Cell(70,6,$query_data["nama"],1,0,'L',1);
-        if ($query_data["ket"] == 'out') {
-            $pdf->Cell(20,6,'-'.$query_data["qty"],1,1,'R',1);
-        }else{
-            $pdf->Cell(20,6,$query_data["qty"],1,1,'R',1);
-        }
+        $stok = ($query_data["astok"]+$query_data["masuk"]-$query_data["keluar"]+$query_data["retur"]+($query_data["so"]));
+        $pdf->Cell(10,5,$total,1,0,'C',1);
+        $pdf->Cell(75,5,$query_data["nama"],1,0,'L',1);
+        $pdf->Cell(22,5,$query_data["masuk"],1,0,'C',1);
+        $pdf->Cell(22,5,$query_data["keluar"],1,0,'C',1);
+        $pdf->Cell(22,5,$query_data["retur"],1,0,'C',1);
+        $pdf->Cell(22,5,$query_data["so"],1,0,'C',1);
+        $pdf->Cell(22,5,$stok,1,1,'C',1);
         $total++;
     }
     if ($total==0){

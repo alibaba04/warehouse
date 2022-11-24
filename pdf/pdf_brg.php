@@ -22,6 +22,9 @@
     $pdf->Cell(85,6,'Nama',1,0,'C',0);
     $pdf->Cell(20,6,'Stok',1,0,'C',0);
     if ($_GET['chk'] == 2) {
+        $pdf->Cell(20,6,'Satuan',1,0,'C',0);
+        $pdf->Cell(35,6,'Harga',1,1,'C',0);
+    }else if($_GET['chk'] == 3){
         $pdf->Cell(20,6,'min Stok',1,0,'C',0);
         $pdf->Cell(20,6,'Satuan',1,1,'C',0);
     }else{
@@ -35,7 +38,7 @@
     $total=0;
     while ($query_data = mysql_fetch_array($rs2)) {
         $stok = ($query_data["astok"]+$query_data["masuk"]-$query_data["keluar"]+$query_data["retur"]+($query_data["so"]));
-        if ($_GET['chk'] == 2) {
+        if ($_GET['chk'] == 3) {
             if ($stok <= $query_data["minstok"]) {
                 $total++;
                 $pdf->Cell(10,6,$total,1,0,'C',0);
@@ -55,7 +58,7 @@
                 $pdf->Cell(20,6,$query_data["satuan"],1,0,'C',0);
                 $pdf->Cell(35,6,$query_data["harga"],1,1,'R',0);
             }
-        }elseif ($_GET['chk'] == 0){
+        }elseif ($_GET['chk'] == 2){
             if ($stok > 0) {
                 $total++;
                 $pdf->Cell(10,6,$total,1,0,'C',0);
@@ -65,6 +68,14 @@
                 $pdf->Cell(20,6,$query_data["satuan"],1,0,'C',0);
                 $pdf->Cell(35,6,number_format($query_data["harga"]),1,1,'R',0);
             }
+        }else{
+            $total++;
+            $pdf->Cell(10,6,$total,1,0,'C',0);
+            $pdf->Cell(30,6,$query_data["kode"],1,0,'C',0);
+            $pdf->Cell(85,6,$query_data["nama"],1,0,'L',0);
+            $pdf->Cell(20,6,$stok,1,0,'R',0);
+            $pdf->Cell(20,6,$query_data["satuan"],1,0,'C',0);
+            $pdf->Cell(35,6,number_format($query_data["harga"]),1,1,'R',0);
         }
     }
     if ($total==0){

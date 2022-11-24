@@ -50,10 +50,8 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             document.getElementById('tgl2').style.display = 'block';
             document.getElementById('tgl').style.display = 'none';
             $(".btnexcel").prop('disabled', false);
-            
         }
     }
-
     $(document).ready(function () {
         document.getElementById('tgl').style.display = 'none';
         $('#tgl').daterangepicker({ 
@@ -93,8 +91,10 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
             chk = 0;
         }else if($('#rdo2').is(':checked')){
             chk = 1;
-        }else{
+        }else if($('#rdo3').is(':checked')){
             chk = 2;
+        }else{
+            chk = 3;
         }
         if ($("#txtJenis").val() == 1) {
             location.href='pdf/pdf_brg.php?&brg='+$("#txtbrg").val()+'&tgl='+$("#tgl2").val()+'&chk='+chk;
@@ -143,21 +143,27 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                     </select>
                 </div>
                 <div class="custom-control custom-checkbox">
-                    <section class="col-lg-4">
+                    <section class="col-lg-2">
                         <label>
                             <input type="radio" name="r1" class="minimal" id="rdo1" checked="">
-                        Stok > minStok
+                        Semua
                         </label>
                     </section>
-                    <section class="col-lg-4">
+                    <section class="col-lg-3">
                         <label>
                             <input type="radio" name="r1" class="minimal" id="rdo2">
                         Stok Habis
                         </label>
                     </section>
-                    <section class="col-lg-4">
+                    <section class="col-lg-3">
                         <label>
                             <input type="radio" name="r1" class="minimal" id="rdo3">
+                        Stok Ada
+                        </label>
+                    </section>
+                    <section class="col-lg-4">
+                        <label>
+                            <input type="radio" name="r1" class="minimal" id="rdo4">
                         Stok < minStok
                         </label>
                     </section>

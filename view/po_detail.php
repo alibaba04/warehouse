@@ -137,18 +137,18 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
         trow.appendChild(td);
 
         //Kolom 2 Barang 
-        if ($("#txtjbrg").val() == 'penunjang') {
-            var td = document.createElement("TD");
-            td.setAttribute("align","left");
-            td.style.verticalAlign = 'top';
-            td.innerHTML+='<div class="form-group"><input name="txtkodeb_'+tcounter+'" id="txtkodeb_'+tcounter+'" class="form-control" style="text-align:left" required onfocusout="selectbrg2('+tcounter+')"></div>';
-            trow.appendChild(td);
-        }else{
+        if ($("#txtjbrg").val() == 'persediaan' ) {
             kodeb(tcounter);
             var td = document.createElement("TD");
             td.setAttribute("align","left");
             td.style.verticalAlign = 'top';
             td.innerHTML+='<div class="form-group"><select class="form-control select2" name="txtkodeb_'+tcounter+'" id="txtkodeb_'+tcounter+'" onchange="selectbrg('+tcounter+')"><option>- Nama Barang- </option></select></div>';
+            trow.appendChild(td);
+        }else{
+            var td = document.createElement("TD");
+            td.setAttribute("align","left");
+            td.style.verticalAlign = 'top';
+            td.innerHTML+='<div class="form-group"><input name="txtkodeb_'+tcounter+'" id="txtkodeb_'+tcounter+'" class="form-control" style="text-align:left" required onfocusout="selectbrg2('+tcounter+')"></div>';
             trow.appendChild(td);
         }
 
@@ -263,8 +263,9 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                             <label class="control-label" for="txtjbrg">Barang</label>
                         </div>
                         <select class="form-control" name="txtjbrg" id="txtjbrg">
-                            <option value="persediaan">Persedian Produksi</option>
-                            <option value="penunjang">Penunjang</option>
+                            <option value="persediaan">Bahan Baku</option>
+                            <option value="penunjang">Perlengkapan Peralatan Kantor</option>
+                            <option value="penunjang2">Perlengkapan Peralatan Produksi</option>
                         </select>
                     </div>
                 </div>
@@ -353,14 +354,14 @@ if (substr($_SERVER['PHP_SELF'], -10, 10) == "index2.php" && $hakUser == 90) {
                                 echo '<input  type="hidden" name="txtjbrg_'. $iPO .'" id="txtjbrg_'. $iPO .'" value="'.$dpolist["jbarang"].'">';
                                 $q = "SELECT * FROM `aki_barang`";
                                 $listbrg = mysql_query($q, $dbLink);
-                                if ($dpolist["jbarang"] == 'penunjang') {
-                                    echo '<td align="center" valign="top" width=><div class="form-group"><input type="text" class="form-control" name="txtkodeb_' . $iPO . '" id="txtkodeb_' . $iPO . '" value="' . $dpolist["id_barang"]. '"style="text-align:left"/></div></td>';
-                                }else{
+                                if ($dpolist["jbarang"] == 'persediaan') {
                                     echo '<td align="" valign="top" width=><div class="form-group"><select class="form-control select2" name="txtkodeb_' . $iPO . '" id="txtkodeb_' . $iPO . '">
                                     <option value="'.$dpolist['kode'].'">'.$dpolist['kode'].' - '.$dpolist['nama'].'</option>';
                                     while ($dbrg = mysql_fetch_array($listbrg)) {
                                         echo '<option value="'.$dbrg['kode'].'">'.$dbrg['kode'].' - '.$dbrg['nama'].'</option>';
                                     }
+                                }else{
+                                    echo '<td align="center" valign="top" width=><div class="form-group"><input type="text" class="form-control" name="txtkodeb_' . $iPO . '" id="txtkodeb_' . $iPO . '" value="' . $dpolist["kode_barang"]. '"style="text-align:left"/></div></td>';
                                 }
                                 
                                 echo '<td align="center" valign="top" width=><div class="form-group"><input type="text" onkeydown="return numbersonly(this, event);"  class="form-control" name="txtqty_' . $iPO . '" id="txtqty_' . $iPO . '" value="' . $dpolist["qty"]. '"style="text-align:right"/ onfocusout="subtotal(' . $iPO . ')"></div></td>';

@@ -26,6 +26,7 @@ require_once('./function/fungsi_formatdate.php');
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Font Awesome -->
     <!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">-->
+    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/AdminLTE.css">
@@ -245,6 +246,8 @@ require_once('./function/fungsi_formatdate.php');
         <script src="plugins/morris/morris.min.js"></script>
         <!-- AdminLTE App -->
         <script src="dist/js/app.min.js"></script>
+        <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+        <script src="plugins/jqvmap/maps/jquery.vmap.indonesia.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
